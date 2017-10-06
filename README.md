@@ -1,2 +1,2 @@
 # varnish
-Varnish configuration
+Varnish 4 configuration optimized for Drupal websites
