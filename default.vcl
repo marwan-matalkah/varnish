@@ -48,6 +48,8 @@ sub vcl_init {
 # Incoming requests: Decide whether to try cache or not
 sub vcl_recv {
 
+	set req.backend_hint = default_director.backend();
+
 	if (req.method == "PURGE") {
         if (!client.ip ~ purge) {
             return(synth(405,"Not allowed."));
