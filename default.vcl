@@ -49,6 +49,16 @@ sub vcl_init {
 sub vcl_recv {
 
 	set req.backend_hint = default_director.backend();
+	
+	#To handle X-Forwarded-For, if Varnish was behind CDN e.g. Akamai, True-Client-IP has to be configured.
+        unset req.http.X-Forwarded-For;
+        if (req.http.True-Client-IP){
+        set req.http.X-Forwarded-For = req.http.True-Client-IP;
+        }
+        else {
+        set req.http.X-Forwarded-For = client.ip;
+        }
+
 
 	if (req.method == "PURGE") {
         if (!client.ip ~ purge) {
